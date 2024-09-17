@@ -14,13 +14,11 @@ def check_place(guess, wordle):
             feedback.append(f"{i+1}. letter - {guess[i].upper()}: WRONG place.")
     return feedback
 
-def get_valid_guess(words):
+def get_valid_guess():
     while True:
         guess = input("Guess the word!: ").upper()
         if len(guess) != 5:
             print("That was not a five letter word!")
-        elif guess not in words:
-            print("Word not found!")
         else:
             return guess
 
@@ -29,8 +27,8 @@ def main():
     wordle = random.choice(words)
     attempts = 0
     
-    while attempts < 6:  # Optional: limiting the number of attempts
-        guess = get_valid_guess(words)
+    while attempts < 6:  
+        guess = get_valid_guess()
         attempts += 1
         
         if guess == wordle:
