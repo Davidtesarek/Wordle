@@ -56,3 +56,70 @@ Guess the word!: FLUID
 
 You won!
 
+
+## Programátorská dokumentace hry Wordle
+### RANDOM
+Nejprve importujeme modul **_random_**, který je nutný k náhodnému výběru slov pro hádání.
+### SLOVNÍK
+Dále potřebujeme mít nějaký seznam slov, ze kterého bude hra slova vybírat. 
+-	Proto jsem si stáhl z internetu seznam nejpoužívanějších anglických slov a pak z nich vybral pouze ta pětimístná.
+-	Vytvoříme tak soubor **possible_words.txt** 
+### WORDLE
+#### 1.	**Načtení slovníku**
+
+Vytvoříme funkci **_load_words(file_path)_**, pomocí které program otevře soubor **possible_words.txt** a z jednotlivých slov ve slovníku vytvoří seznam – **words**.
+
+
+#### 2.	**Zkoumání jednotlivých písmen a poskytnutí nápovědy**
+   
+Funkce **_check_place(guess, wordle)_** nám bude sloužit při zkoumání slova daného hráčem.
+
+-	Jejím výstupem bude seznam **feedback**, který bude obsahovat nápovědy
+-	Parametr **guess** reprezentuje dané slovo hráčem a parametr **wordle** zas hledané slovo náhodně vybrané hrou 
+-	Funkce postupně porovnává písmena na stejných pozicích těchto dvou parametrů
+  
+    -	Pokud jsou na stejných pozicích stejná písmena, do výsledného seznamu **feedback** se uloží pozice, písmeno a zpráva, že je písmeno na SPRÁVNÉM, tedy stejném, místě
+      
+    -	Pokud jsou na stejné pozici jiná písmena, ale písmeno se v hledaném slově nachází (in **wordle**), do výsledného seznamu **feedback** se uloží pozice, písmeno a zpráva, že je písmeno na ŠPATNÉM místě
+      
+    -	Pokud se písmeno v hledaném slově nenachází vůbec, do seznamu **feedback** se neuloží nic
+-	Např:
+    -	guess = PLANE, wordle = APPLE => check_place(guess, wordle) 
+
+=>	 feedback = [“1. Letter – P: WRONG place”, „2. Letter – L: WRONG place”, “3. Letter – A: WRONG place”, “5. Letter – E: RIGHT place”]
+
+-	Funkce vrací seznam **feedback**
+  
+
+#### 3.	**Kontrola správného formátu zadaných slov**
+   
+Funkce **_get_valid_guess()_** kontroluje, zda je slovo zadané hráčem (**guess**) validní, tedy jestli je pětimístné.
+
+-	Kontrola je umožněna while cyklem, který končí v momentě, kdy je zadáno validní slovo.
+-	Nejprve vyzveme hráče, aby zadal slovo. Toto slovo uložíme do proměnné **guess**. Pak následuje kontrola:
+  
+    -	Pokud slovo není pětimístné, vrací program zprávu: _"That was not a five letter word!"_ a cyklus pokračuje
+      
+    -	Pokud slovo je pětimístné, je validní a tedy jej můžeme použít. Cyklus je zastaven.
+      
+-	Funkce vrací proměnnou **guess**, tedy validní slovo
+  
+
+#### 4.	**Samotná hra**
+   
+Nejprve využijeme funkci **_load_words(„possible_words.txt“)_** a vytvoříme tak seznam slov -  **words**.
+
+Poté s pomocí příkazu **_random.choice(words)_** z tohoto seznamu do proměnné **wordle** uložíme náhodně vybrané slovo. Toto slovo chce hráč uhodnout.
+
+Uživatel má šest pokusů na to, aby slovo uhádl, proto vytvoříme while cyklus, který se zastaví po šestém pokusu, a nebo v případě, že hráč slovo uhodne.
+
+Následuje výzva hráče k hádání. Využijeme funkci **_get_valid_guess()_** a obdržíme tak od uživatele validní slovo, které uložíme do proměnné **guess**.
+
+Pokud je **guess** stejné jako **wordle**, hráč vyhrál. Program mu tuto skutečnost sdělí pomocí zprávy _„You won!“_ a poté ukončí cyklus – break.
+
+Jinak použijeme funkci **_check_place(guess, wordle)_**, která postupně srovná písmena obou parametrů **guess** a **wordle** na první až na páté (poslední) pozici. Hráč tak dostane nápovědy a hádá znovu.
+
+V momentě, kdy dojdou všechny pokusy a slovo není stále uhodnuto -  cyklus skončil přirozeně, uživatel prohrává. Program vytiskne zprávu _„You lost!“_  a sdělí správnou odpověď: _„The right answer was: {wordle} “_
+
+Konec programu
+
